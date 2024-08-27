@@ -4,6 +4,7 @@ import ADDRoutes from "../PathRouters/ConfigRoutes";
 import HomePage from "../../Pages/HomePage";
 import LoginPage from "../../Pages/LoginPage";
 import SignupPage from "../../Pages/SignupPage";
+import CoursesPage from "../../Pages/CoursesPage";
 
 
 
@@ -23,6 +24,10 @@ import SignupPage from "../../Pages/SignupPage";
             {
                 path:ADDRoutes.Signup,
                 element:<SignupPage/>
+            },
+            {
+                path:ADDRoutes.Courses,
+                element:<CoursesPage/>
             }
         ]
     }
