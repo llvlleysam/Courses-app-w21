@@ -1,10 +1,11 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import Layout from "../../Components/Layout/Layout";
 import ADDRoutes from "../PathRouters/ConfigRoutes";
 import HomePage from "../../Pages/HomePage";
 import LoginPage from "../../Pages/LoginPage";
 import SignupPage from "../../Pages/SignupPage";
 import CoursesPage from "../../Pages/CoursesPage";
+import AddCoursePage from "../../Pages/AddCoursePage";
 
 
 
@@ -12,6 +13,7 @@ import CoursesPage from "../../Pages/CoursesPage";
     {
         path:ADDRoutes.Home,
         element:<Layout/>,
+        errorElement:<Navigate to={"/"}/>,
         children:[
             {
                 index:true,
@@ -28,6 +30,10 @@ import CoursesPage from "../../Pages/CoursesPage";
             {
                 path:ADDRoutes.Courses,
                 element:<CoursesPage/>
+            },
+            {
+                path: ADDRoutes.AddCourse,
+                element: <AddCoursePage/>
             }
         ]
     }

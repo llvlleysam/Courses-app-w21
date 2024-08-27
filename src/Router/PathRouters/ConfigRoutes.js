@@ -4,7 +4,8 @@ const ADDRoutes = {
     Courses: "/courses",
     Contact: "/contact",
     Login: "/login",
-    Signup: "/signup"
+    Signup: "/signup",
+    AddCourse: "/addcourse"
 }
 
 export default ADDRoutes

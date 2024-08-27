@@ -12,6 +12,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import * as React from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+//--------Icon----
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
 
 
 
@@ -56,16 +58,17 @@ const style = {
 export default function CoursesPage() {
     const queryClient = useQueryClient()
     const navigate = useNavigate()
-    const [page , setPage] = useState()
-    const {data,error,refetch}=useGetCourses(page)
+    const [page , setPage] = useState(1)
     const {mutate} = useDeleteCourses()
+    const {data,error,refetch}=useGetCourses(page)
     // console.log(data?.data)
     const Token = localStorage.getItem("access")
     //-------pagination----
+    React.useEffect(() => {  
+      refetch();  
+    }, [page])
     function handelPagination(event,value){
       setPage(value)
-      console.log(value)
-      refetch()
     }
     // console.log(page)
     //----modal-----
@@ -147,7 +150,10 @@ export default function CoursesPage() {
 
 
 
-      <TableContainer component={Paper} elevation={3} style={{padding:50,borderRadius:100}}>
+      <TableContainer component={Paper} elevation={3} style={{padding:50,borderRadius:30}}>
+        <Button variant="contained" color="secondary" startIcon={<NoteAddIcon/>} sx={{mb:2}} onClick={()=>navigate(ADDRoutes.AddCourse)}>
+          ساخت دوره جدید
+        </Button>
         <Table sx={{ minWidth: 700}} aria-label="customized table" >
           <TableHead>
             <TableRow>
@@ -182,7 +188,7 @@ export default function CoursesPage() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Stack spacing={2}>
+      <Stack spacing={2} sx={{mt:2}}>
         <Pagination count={Math.ceil(data?.data?.count/5)} color="primary" shape="rounded" onChange={handelPagination}/>
       </Stack>
     </div>

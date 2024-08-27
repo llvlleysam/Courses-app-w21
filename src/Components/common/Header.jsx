@@ -11,6 +11,7 @@ import DiamondIcon from "@mui/icons-material/Diamond";
 import ADDRoutes from "../../Router/PathRouters/ConfigRoutes";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 
 
@@ -27,7 +28,7 @@ import LoginIcon from '@mui/icons-material/Login';
 
 export default function Header() {
     const navigate = useNavigate()
-    
+    const Token = localStorage.getItem("access")
 
   
     
@@ -44,7 +45,13 @@ export default function Header() {
           <Stack variant="contained" direction={"row"}>
             {navbar.map((nav,index)=><Button color="inherit" key={index} onClick={()=>navigate(nav.route)}>{nav.title}</Button>)}
           </Stack>
-          <Button color="inherit" variant="outlined" sx={{marginLeft:3}} onClick={()=>navigate(ADDRoutes.Login)} startIcon={<LoginIcon />}>ورود</Button>
+          {Token ?
+          <Button color="inherit" variant="outlined" sx={{marginLeft:3}} onClick={()=>{
+            navigate(ADDRoutes.Login)
+            localStorage.clear()
+          }} startIcon={<LogoutIcon />}>خروج</Button>
+            :
+          <Button color="inherit" variant="outlined" sx={{marginLeft:3}} onClick={()=>navigate(ADDRoutes.Login)} startIcon={<LoginIcon />}>ورود</Button>}
         </Toolbar>
       </Container>
     </AppBar>
