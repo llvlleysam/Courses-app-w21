@@ -10,8 +10,44 @@ import {
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { addCourseValidation } from "../Schema/ValidationForm";
+import useAddCourse from "../Hooks/useAddCourse";
+import { useNavigate } from "react-router-dom";
+//---------------
+import * as React from 'react';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import ADDRoutes from "../Router/PathRouters/ConfigRoutes";
+
+
 
 export default function AddCoursePage() {
+
+  const {mutate}=useAddCourse()
+  const navigate = useNavigate()
+
+  //--------Alert-------
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  const [state, setState] = React.useState({
+    open: false,
+    vertical: 'top',
+    horizontal: 'center',
+  })
+
+  //--------------
+
   const {
     register,
     handleSubmit,
@@ -43,6 +79,13 @@ export default function AddCoursePage() {
     formData.append("number_of_chapter",values.number_of_chapter)
     formData.append("number_of_viewer",values.number_of_viewer)
     formData.append("upload_images",values.upload_images[0])
+    mutate(formData,{onSuccess:()=>{
+      handleClick()
+      reset()
+      setTimeout(()=>{
+        navigate(ADDRoutes.Courses)
+      },3000)
+    }})
     // console.log(values);
     // console.log(errors)
     // console.log(formData.get("upload_images"))
@@ -50,6 +93,20 @@ export default function AddCoursePage() {
   return (
     <div>
       <Toolbar />
+
+      <Snackbar sx={{height:"100vh", top:"-350px"}} open={open} autoHideDuration={2000} onClose={handleClose}>
+        <Alert
+          onClose={handleClose}
+          severity="success"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          دوره با موفقیت ثبت شد
+        </Alert>
+      </Snackbar>
+
+
+
       <Grid
         container
         width={"100%"}
@@ -136,7 +193,7 @@ export default function AddCoursePage() {
                 error={errors.number_of_viewer}
                 helperText={errors.number_of_viewer?.message}
               />
-              <label style={{ padding: 15 }} style={{display:"flex" , flexDirection:"column"}}>
+              <label style={{ padding: 15 , display:"flex" , flexDirection:"column"}}>
                 <span>کاور دوره : </span>
                 <input
                   type="file"
