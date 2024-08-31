@@ -122,6 +122,7 @@ export default function CoursesPage() {
     reset,
     formState: { errors },
     setValue,
+    watch
   } = useForm({
     resolver: zodResolver(editCourseValidation),
     defaultValues: {
@@ -147,7 +148,6 @@ export default function CoursesPage() {
     setValue("number_of_viewer",oneData?.number_of_viewer)
     // setValue("upload_images",oneData.upload_images[0].image)
   }
-
 
   function onsubmit(values) {
 
