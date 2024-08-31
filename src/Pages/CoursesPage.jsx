@@ -81,7 +81,7 @@ export default function CoursesPage() {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-    //----modal edit-----
+    //----modal edit-------------------------------------------********
     const [editVal,setEditVal] = useState(null)
     const{data:oneData,refetch:refetchOne}=useGetOneCourse(editVal)
     React.useEffect(()=>{
@@ -93,7 +93,7 @@ export default function CoursesPage() {
     const [openEdit, setOpenEdit] = useState(false);
     const handleOpenEdit = () => setOpenEdit(true);
     const handleCloseEdit = () => setOpenEdit(false);
-      //--------Alert-------
+  //--------Alert-------
   const [openAlert, setOpenAlert] = React.useState(false);
 
   const handleClickAlert = () => {
@@ -114,7 +114,7 @@ export default function CoursesPage() {
     horizontal: 'center',
   })
 
-  //-----edit-----
+  //-----edit------------------------------------******************
   
   const {
     register,
@@ -190,7 +190,7 @@ export default function CoursesPage() {
           </Snackbar>
 
 
-
+          {/* modal Delete */}
 
               <Modal
               open={open}
@@ -215,7 +215,7 @@ export default function CoursesPage() {
               </Box>
             </Modal>
 
-
+          {/* modal edite ---------------------------------*************************        */}
             <Modal
               open={openEdit}
               onClose={handleCloseEdit}
