@@ -6,6 +6,7 @@ import LoginPage from "../../Pages/LoginPage";
 import SignupPage from "../../Pages/SignupPage";
 import CoursesPage from "../../Pages/CoursesPage";
 import AddCoursePage from "../../Pages/AddCoursePage";
+import AboutPage from "../../Pages/AboutPage";
 
 
 
@@ -34,6 +35,10 @@ import AddCoursePage from "../../Pages/AddCoursePage";
             {
                 path: ADDRoutes.AddCourse,
                 element: <AddCoursePage/>
+            },
+            {
+                path: ADDRoutes.Contact,
+                element: <AboutPage/>
             }
         ]
     }

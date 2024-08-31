@@ -17,3 +17,11 @@ export const addCourseValidation = z.object({
     number_of_viewer: z.string().min(1, { message: "تعداد بازدید را وارد کنید" }),
     upload_images: z.instanceof(FileList).refine(files => files.length > 0, {message: "فایل نمی‌تواند خالی باشد"})
 })
+export const editCourseValidation = z.object({
+    teacher: z.string().min(1, { message: "وارد کردن نام مدرس الزامی است" }),
+    title: z.string().min(1, { message: "وارد کردن عنوان دوره الزامی است" }),
+    category: z.string().min(1, { message: "دسته بندی انتخاب نشده است" }),
+    duration: z.string(),
+    price: z.string(),
+
+})

@@ -17,12 +17,13 @@ import * as React from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import ADDRoutes from "../Router/PathRouters/ConfigRoutes";
+import RotateRightIcon from '@mui/icons-material/RotateRight';
 
 
 
 export default function AddCoursePage() {
 
-  const {mutate}=useAddCourse()
+  const {mutate,isPending}=useAddCourse()
   const navigate = useNavigate()
 
   //--------Alert-------
@@ -206,7 +207,7 @@ export default function AddCoursePage() {
                 {errors.upload_images?<span style={{color:"red"}}>{errors.upload_images?.message}</span>:""}
               </label>
               <Button type="submit" variant="contained" style={{ padding: 15 }}>
-                ساخت دوره
+                {isPending ? <RotateRightIcon/> :"ساخت دوره"}
               </Button>
             </Stack>
           </Paper>
