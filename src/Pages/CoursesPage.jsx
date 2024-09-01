@@ -1,6 +1,8 @@
 import {
   Box,
   Button,
+  Checkbox,
+  FormControlLabel,
   Grid,
   Modal,
   Pagination,
@@ -39,6 +41,7 @@ import {
 } from "../Schema/ValidationForm";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import useGetOneCourse from "../Hooks/getOneCourse";
+import useEditCourse from "../Hooks/useEditCourse";
 
 //-----table-----
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -79,14 +82,15 @@ export default function CoursesPage() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
+  const [checked, setChecked] = React.useState("");
   const { mutate } = useDeleteCourses();
-  const { data, error, refetch } = useGetCourses(page);
+  const { data, error, refetch } = useGetCourses({page,checked});
   // console.log(data?.data)
   const Token = localStorage.getItem("access");
   //-------pagination----
   React.useEffect(() => {
     refetch();
-  }, [page]);
+  }, [page,checked]);
 
   function handelPagination(event, value) {
     setPage(value);
@@ -101,6 +105,7 @@ export default function CoursesPage() {
   //----modal edit-------------------------------------------********
   const [editVal, setEditVal] = useState(null);
   const { data: oneData, refetch: refetchOne } = useGetOneCourse(editVal);
+  const { mutate: mutateEdit } = useEditCourse();
   React.useEffect(() => {
     if (editVal) {
       refetchOne();
@@ -171,19 +176,31 @@ export default function CoursesPage() {
   }, [oneData]);
 
   function onsubmit(values) {
-    // const formData = new  FormData()
-    // formData.append("teacher",values.teacher)
-    // formData.append("title",values.title)
-    // formData.append("category",values.category)
-    // formData.append("duration",values.duration)
-    // formData.append("price",values.price)
-    // formData.append("description",values.description)
-    // formData.append("number_of_chapter",values.number_of_chapter)
-    // formData.append("number_of_viewer",values.number_of_viewer)
-    // formData.append("upload_images",values.upload_images[0])
-    console.log(values);
+    const formData = new FormData();
+    formData.append("teacher", values.teacher);
+    formData.append("title", values.title);
+    formData.append("category", values.category);
+    formData.append("duration", values.duration);
+    formData.append("price", values.price);
+    formData.append("description", values.description);
+    formData.append("number_of_chapter", values.number_of_chapter);
+    formData.append("number_of_viewer", values.number_of_viewer);
+    formData.append("upload_images", values.upload_images[0]);
+    mutateEdit({ id: oneData.id, editedCourse: formData });
+    // console.log(oneData.id);
+    // console.log(formData.get("upload_images"));
   }
 
+  //-------Category-------
+  
+
+  const handleChange = (event) => {
+    if(event.target.checked){
+      setChecked(2);
+    }else{
+      setChecked("")
+    }
+  };
   // if(error){
   //   return(
   //     <>
@@ -350,8 +367,8 @@ export default function CoursesPage() {
                   helperText={errors.category?.message}
                 >
                   <option value="">دسته بندی</option>
-                  <option value="Frontend">فرانت اند</option>
-                  <option value="Backend">بک تند</option>
+                  <option value="1">فرانت اند</option>
+                  <option value="2">بک تند</option>
                 </select>
                 {errors.category ? (
                   <span style={{ color: "red", fontSize: 12 }}>
@@ -620,6 +637,20 @@ export default function CoursesPage() {
                 ))}
               </TableBody>
             </Table>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={checked}
+                  onChange={handleChange}
+                  color="success"
+                />
+              }
+              label={
+                <Typography style={{ color: checked ? "green" : "black" , fontWeight:"bold" }}>
+                  فقط نمایش Frontend
+                </Typography>
+              }
+            />
           </TableContainer>
           <Stack spacing={2} sx={{ mt: 2 }}>
             <Pagination
