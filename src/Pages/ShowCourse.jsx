@@ -66,13 +66,13 @@ export default function ShowCourse() {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        backgroundImage: `url('OR6ILI0.jpg')`,
+        backgroundImage: `url('/bg-show-course.jpg')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
     >
       <Toolbar />
-      <Card elevation={20} sx={{ minWidth: 500 ,borderRadius:"20px",padding:2}}>
+      <Card elevation={20} sx={{ minWidth: 500,maxWidth: 500 ,borderRadius:"20px",padding:2}}>
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: blue[500] }} aria-label="recipe">
@@ -89,7 +89,7 @@ export default function ShowCourse() {
         />
         <CardMedia
           component="img"
-          height="194"
+          height="300"
           image={data?.images[0]?.image}
           alt={data?.teacher}
         />
