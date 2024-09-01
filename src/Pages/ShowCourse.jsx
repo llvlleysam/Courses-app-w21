@@ -46,7 +46,7 @@ const ExpandMore = styled((props) => {
 export default function ShowCourse() {
   const { id } = useParams();
   const { data } = useGetOneCourse(id);
-  console.log(data);
+
   //--------Card----
   const [expanded, setExpanded] = React.useState(false);
   let firstLetter = data?.teacher.split("")[0];
