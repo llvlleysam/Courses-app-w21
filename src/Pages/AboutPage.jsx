@@ -3,10 +3,17 @@ import TelegramIcon from '@mui/icons-material/Telegram';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import MapComponent from "../Components/map/MapComponent";
+//--------Helmet----
+import {Helmet} from "react-helmet";
 
 export default function AboutPage() {
   return (
     <div style={{height:"100vh", display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
+      <Helmet>
+                <meta charSet="utf-8" />
+                <title>تماس با ما</title>
+                <link rel="canonical" href="http://mysite.com/example" />
+      </Helmet>
       <Toolbar/>
       <Paper elevation={20} style={{width:"700px", padding:"20px", borderRadius:"15px", display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center",gap:"20px"}}>
         <Typography fontSize={15} fontWeight={"bold"}>راه های ارتباطی</Typography>

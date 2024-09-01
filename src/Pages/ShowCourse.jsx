@@ -18,6 +18,9 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+//--------Helmet----
+import {Helmet} from "react-helmet";
+import { SvgSpinnersRingResize } from "../Components/common/spinner/spinnerLoadingShowCourse";
 
 //-----Card----
 const ExpandMore = styled((props) => {
@@ -45,7 +48,7 @@ const ExpandMore = styled((props) => {
 }));
 export default function ShowCourse() {
   const { id } = useParams();
-  const { data } = useGetOneCourse(id);
+  const { data , isLoading } = useGetOneCourse(id);
 
   //--------Card----
   const [expanded, setExpanded] = React.useState(false);
@@ -57,7 +60,9 @@ export default function ShowCourse() {
 
   //----- Rating----
   const [value, setValue] = React.useState(2);
-
+  if(isLoading){
+    return <div><SvgSpinnersRingResize/></div>
+  }
   return (
     <div
       style={{
@@ -71,6 +76,11 @@ export default function ShowCourse() {
         backgroundPosition: "center",
       }}
     >
+      <Helmet>
+                <meta charSet="utf-8" />
+                <title>نمایش دوره {data.title ? data?.title : ""}</title>
+                <link rel="canonical" href="http://mysite.com/example" />
+      </Helmet>
       <Toolbar />
       <Card elevation={20} sx={{ minWidth: 500,maxWidth: 500 ,borderRadius:"20px",padding:2}}>
         <CardHeader

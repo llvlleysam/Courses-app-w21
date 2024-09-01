@@ -20,6 +20,8 @@ import * as React from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
+//--------Helmet----
+import {Helmet} from "react-helmet";
 
 
 
@@ -46,6 +48,7 @@ export default function LoginPage() {
     vertical: 'top',
     horizontal: 'center',
   })
+
   
 //---------------
 
@@ -71,6 +74,11 @@ export default function LoginPage() {
 
   return (
     <div style={{width:"100vw",height:"100vh"}}>
+      <Helmet>
+                <meta charSet="utf-8" />
+                <title>ورود به حساب کاربری</title>
+                <link rel="canonical" href="http://mysite.com/example" />
+      </Helmet>
       <Toolbar />
 
 

@@ -17,6 +17,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 //-----image----
 import backgroundImage from "../../public/meysam.jpg";
+//--------Helmet----
+import {Helmet} from "react-helmet";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -70,6 +72,11 @@ export default function HomePage() {
         backgroundPosition: "center",
       }}
     >
+      <Helmet>
+                <meta charSet="utf-8" />
+                <title>دوره های آموزشی</title>
+                <link rel="canonical" href="http://mysite.com/example" />
+      </Helmet>
       <Toolbar />
       <Card elevation={20} sx={{ maxWidth: 345 }}>
         <CardHeader

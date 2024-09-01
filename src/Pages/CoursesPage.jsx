@@ -44,6 +44,11 @@ import useGetOneCourse from "../Hooks/getOneCourse";
 import useEditCourse from "../Hooks/useEditCourse";
 //---view----
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+//--------Helmet----
+import {Helmet} from "react-helmet";
+
+
+
 
 //-----table-----
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -223,6 +228,11 @@ export default function CoursesPage() {
             padding: 20,
           }}
         >
+          <Helmet>
+                <meta charSet="utf-8" />
+                <title>لیست دوره ها</title>
+                <link rel="canonical" href="http://mysite.com/example" />
+          </Helmet>
           <Toolbar />
 
           <Snackbar

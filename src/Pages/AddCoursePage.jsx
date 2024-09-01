@@ -18,7 +18,8 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import ADDRoutes from "../Router/PathRouters/ConfigRoutes";
 import RotateRightIcon from '@mui/icons-material/RotateRight';
-
+//--------Helmet----
+import {Helmet} from "react-helmet";
 
 
 export default function AddCoursePage() {
@@ -93,6 +94,11 @@ export default function AddCoursePage() {
   }
   return (
     <div>
+      <Helmet>
+                <meta charSet="utf-8" />
+                <title>اضافه کردن دوره جدید</title>
+                <link rel="canonical" href="http://mysite.com/example" />
+      </Helmet>
       <Toolbar />
 
       <Snackbar sx={{height:"100vh", top:"-350px"}} open={open} autoHideDuration={2000} onClose={handleClose}>

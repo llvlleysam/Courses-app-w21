@@ -15,6 +15,10 @@ import {
   import { useNavigate } from "react-router-dom";
   import ADDRoutes from "../Router/PathRouters/ConfigRoutes";
 import useSignupAuthentication from "../Hooks/useSignup.Authentication";
+//--------Helmet----
+import {Helmet} from "react-helmet";
+
+
 
 export default function SignupPage() {
     const navigate = useNavigate()
@@ -36,6 +40,11 @@ export default function SignupPage() {
 
   return (
     <div>
+      <Helmet>
+                <meta charSet="utf-8" />
+                <title>ایجاد حساب کاربری</title>
+                <link rel="canonical" href="http://mysite.com/example" />
+      </Helmet>
       <Toolbar />
       <Container
         sx={{
