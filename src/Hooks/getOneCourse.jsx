@@ -5,7 +5,8 @@ import getOneCourseApi from "../api/getOneCourseApi";
 export default function useGetOneCourse(id) {
   return useQuery({
     queryKey:["oneCourse"],
-    queryFn:()=>getOneCourseApi(id)
+    queryFn:()=>getOneCourseApi(id),
+    enabled: !!id
   })
 }
 //------------------------------------*****************************************
