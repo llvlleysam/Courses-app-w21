@@ -42,6 +42,8 @@ import {
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import useGetOneCourse from "../Hooks/getOneCourse";
 import useEditCourse from "../Hooks/useEditCourse";
+//---view----
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
 //-----table-----
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -631,6 +633,12 @@ export default function CoursesPage() {
                         }}
                       >
                         <EditIcon />
+                      </Button>
+                      <Button
+                        color="info"
+                        onClick={()=>navigate(`/showcourse/${row.id}`)}
+                      >
+                        <RemoveRedEyeIcon />
                       </Button>
                     </StyledTableCell>
                   </StyledTableRow>
