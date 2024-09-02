@@ -1,4 +1,5 @@
 import {
+  alpha,
   Box,
   Button,
   Checkbox,
@@ -19,7 +20,7 @@ import {
   Typography,
 } from "@mui/material";
 import useGetCourses from "../Hooks/useGet.Courses";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import ADDRoutes from "../Router/PathRouters/ConfigRoutes";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -43,12 +44,13 @@ import EditNoteIcon from "@mui/icons-material/EditNote";
 import useGetOneCourse from "../Hooks/getOneCourse";
 import useEditCourse from "../Hooks/useEditCourse";
 //---view----
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 //--------Helmet----
-import {Helmet} from "react-helmet";
-
-
-
+import { Helmet } from "react-helmet";
+//-------Search----
+import SearchIcon from "@mui/icons-material/Search";
+import InputBase from "@mui/material/InputBase";
+import debounce from "lodash.debounce";
 
 //-----table-----
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -84,6 +86,47 @@ const style = {
   border: "solid #0B78F1",
   p: 4,
 };
+//-------Search----
+const Search = styled("div")(({ theme }) => ({
+  position: "relative",
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.black, 0.15),
+  "&:hover": {
+    backgroundColor: alpha(theme.palette.common.black, 0.35),
+  },
+  marginLeft: 0,
+  width: "100%",
+  [theme.breakpoints.up("sm")]: {
+    marginLeft: theme.spacing(1),
+    width: "30%",
+  },
+}));
+
+const SearchIconWrapper = styled("div")(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+}));
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: "inherit",
+  width: "100%",
+  "& .MuiInputBase-input": {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create("width"),
+    [theme.breakpoints.up("sm")]: {
+      width: "12ch",
+      "&:focus": {
+        width: "20ch",
+      },
+    },
+  },
+}));
 
 export default function CoursesPage() {
   const queryClient = useQueryClient();
@@ -91,13 +134,34 @@ export default function CoursesPage() {
   const [page, setPage] = useState(1);
   const [checked, setChecked] = React.useState("");
   const { mutate } = useDeleteCourses();
-  const { data, error, refetch } = useGetCourses({page,checked});
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { data, error, refetch } = useGetCourses({
+    page,
+    checked,
+    search: searchParams?.get("q"),
+  });
   // console.log(data?.data)
   const Token = localStorage.getItem("access");
+  //-------Search----
+  function handelSearch(text) {
+    if (text.length > 0) {
+      setSearchParams((prev) => {
+        prev.set("q", text);
+        return prev;
+      });
+      console.log(searchParams.get("q"));
+    } else {
+      setSearchParams((prev) => {
+        prev.delete("q");
+        return prev;
+      });
+    }
+  }
+  // const debouncedSearch = React.useMemo(() => debounce(handelSearch, 300), []);
   //-------pagination----
   React.useEffect(() => {
     refetch();
-  }, [page,checked]);
+  }, [page, checked, searchParams?.get("q")]);
 
   function handelPagination(event, value) {
     setPage(value);
@@ -199,13 +263,12 @@ export default function CoursesPage() {
   }
 
   //-------Category-------
-  
 
   const handleChange = (event) => {
-    if(event.target.checked){
+    if (event.target.checked) {
       setChecked(2);
-    }else{
-      setChecked("")
+    } else {
+      setChecked("");
     }
   };
   // if(error){
@@ -229,9 +292,9 @@ export default function CoursesPage() {
           }}
         >
           <Helmet>
-                <meta charSet="utf-8" />
-                <title>لیست دوره ها</title>
-                <link rel="canonical" href="http://mysite.com/example" />
+            <meta charSet="utf-8" />
+            <title>لیست دوره ها</title>
+            <link rel="canonical" href="http://mysite.com/example" />
           </Helmet>
           <Toolbar />
 
@@ -580,15 +643,32 @@ export default function CoursesPage() {
             elevation={3}
             style={{ padding: 50, borderRadius: 30 }}
           >
-            <Button
-              variant="contained"
-              color="secondary"
-              startIcon={<NoteAddIcon />}
-              sx={{ mb: 2 }}
-              onClick={() => navigate(ADDRoutes.AddCourse)}
+            <Stack
+              display={"flex"}
+              direction={"row"}
+              justifyContent={"space-between"}
+              alignItems={"center"}
             >
-              ساخت دوره جدید
-            </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                startIcon={<NoteAddIcon />}
+                sx={{ mb: 2 }}
+                onClick={() => navigate(ADDRoutes.AddCourse)}
+              >
+                ساخت دوره جدید
+              </Button>
+              <Search>
+                <SearchIconWrapper>
+                  <SearchIcon />
+                </SearchIconWrapper>
+                <StyledInputBase
+                  placeholder="Search…"
+                  inputProps={{ "aria-label": "search" }}
+                  onChange={(e) => handelSearch(e.target.value)}
+                />
+              </Search>
+            </Stack>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
               <TableHead>
                 <TableRow>
@@ -604,7 +684,7 @@ export default function CoursesPage() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data?.data?.results.map((row, index) => (
+                {data?.data?.results.length > 0 ? data?.data?.results.map((row, index) => (
                   <StyledTableRow key={row.id}>
                     <StyledTableCell component="th" scope="row" align="center">
                       {index + 1}
@@ -646,13 +726,18 @@ export default function CoursesPage() {
                       </Button>
                       <Button
                         color="info"
-                        onClick={()=>navigate(`/showcourse/${row.id}`)}
+                        onClick={() => navigate(`/showcourse/${row.id}`)}
                       >
                         <RemoveRedEyeIcon />
                       </Button>
                     </StyledTableCell>
                   </StyledTableRow>
-                ))}
+                ))
+              :
+              <Stack display={"flex"} justifyContent={"center"} alignItems={"center"} >
+                <Typography color={"red"} fontWeight={"bold"}>گشتم نبود نگرد نیست</Typography>
+              </Stack>
+              }
               </TableBody>
             </Table>
             <FormControlLabel
@@ -664,7 +749,12 @@ export default function CoursesPage() {
                 />
               }
               label={
-                <Typography style={{ color: checked ? "green" : "black" , fontWeight:"bold" }}>
+                <Typography
+                  style={{
+                    color: checked ? "green" : "black",
+                    fontWeight: "bold",
+                  }}
+                >
                   فقط نمایش Frontend
                 </Typography>
               }

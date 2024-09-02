@@ -61,7 +61,7 @@ export default function ShowCourse() {
   //----- Rating----
   const [value, setValue] = React.useState(2);
   if(isLoading){
-    return <div><SvgSpinnersRingResize/></div>
+    return <div>loading ...</div>
   }
   return (
     <div
