@@ -257,7 +257,10 @@ export default function CoursesPage() {
     formData.append("number_of_chapter", values.number_of_chapter);
     formData.append("number_of_viewer", values.number_of_viewer);
     formData.append("upload_images", values.upload_images[0]);
-    mutateEdit({ id: oneData.id, editedCourse: formData });
+    mutateEdit({ id: oneData.id, editedCourse: formData },{onSuccess:()=>{
+      queryClient.invalidateQueries({queryKey:["courses"]})
+      handleCloseEdit()
+    }});
     // console.log(oneData.id);
     // console.log(formData.get("upload_images"));
   }
