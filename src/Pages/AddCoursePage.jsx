@@ -81,6 +81,7 @@ export default function AddCoursePage() {
     formData.append("number_of_chapter",values.number_of_chapter)
     formData.append("number_of_viewer",values.number_of_viewer)
     formData.append("upload_images",values.upload_images[0])
+    console.log(formData.get("upload_images"))
     mutate(formData,{onSuccess:()=>{
       handleClick()
       reset()

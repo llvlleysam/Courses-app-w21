@@ -149,7 +149,6 @@ export default function CoursesPage() {
         prev.set("q", text);
         return prev;
       });
-      console.log(searchParams.get("q"));
     } else {
       setSearchParams((prev) => {
         prev.delete("q");
@@ -233,16 +232,17 @@ export default function CoursesPage() {
   });
   useEffect(() => {
     if (editVal) {
-      console.log("set shod");
+      // console.log("set shod");
       setValue("teacher", oneData?.teacher);
       setValue("title", oneData?.title);
-      setValue("category", oneData?.category);
+      setValue("category", oneData?.category === "Frontend" ? 1 : 2);
       setValue("duration", oneData?.duration);
       setValue("price", oneData?.price);
       setValue("description", oneData?.description);
       setValue("number_of_chapter", oneData?.number_of_chapter);
       setValue("number_of_viewer", oneData?.number_of_viewer);
       // setValue("upload_images",oneData.upload_images[0])
+      // console.log(oneData.category)
     }
   }, [oneData]);
 
@@ -257,10 +257,19 @@ export default function CoursesPage() {
     formData.append("number_of_chapter", values.number_of_chapter);
     formData.append("number_of_viewer", values.number_of_viewer);
     formData.append("upload_images", values.upload_images[0]);
-    mutateEdit({ id: oneData.id, editedCourse: formData },{onSuccess:()=>{
-      queryClient.invalidateQueries({queryKey:["courses"]})
-      handleCloseEdit()
-    }});
+    mutateEdit(
+      { id: oneData.id, editedCourse: formData },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["courses"] });
+          handleClickAlert();
+          handleCloseEdit();
+          setTimeout(() => {
+            setEditVal(null);
+          },3000);
+        },
+      }
+    );
     // console.log(oneData.id);
     // console.log(formData.get("upload_images"));
   }
@@ -309,11 +318,13 @@ export default function CoursesPage() {
           >
             <Alert
               onClose={handleCloseAlert}
-              severity="error"
+              severity={editVal ? "warning" : "error"}
               variant="filled"
               sx={{ width: "100%" }}
             >
-              دوره "{deleteVal?.teacher}" با موفقیت حذف گردید
+              {!editVal
+                ? `دوره ${deleteVal?.teacher} با موفقیت حذف گردید`
+                : "ویرایش شد"}
             </Alert>
           </Snackbar>
 
@@ -366,6 +377,11 @@ export default function CoursesPage() {
             onClose={handleCloseEdit}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
           >
             <Paper sx={{ p: 5, width: 550 }} elevation={24}>
               <Typography
@@ -687,60 +703,70 @@ export default function CoursesPage() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data?.data?.results.length > 0 ? data?.data?.results.map((row, index) => (
-                  <StyledTableRow key={row.id}>
-                    <StyledTableCell component="th" scope="row" align="center">
-                      {index + 1}
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      {row.title}
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      {row.teacher}
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      {row.duration}
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      {row.category}
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      {row.price}
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      <Button
-                        color="error"
-                        onClick={() => {
-                          setDeleteVal({ id: row.id, teacher: row.teacher });
-                          return handleOpen();
-                        }}
+                {data?.data?.results.length > 0 ? (
+                  data?.data?.results.map((row, index) => (
+                    <StyledTableRow key={row.id}>
+                      <StyledTableCell
+                        component="th"
+                        scope="row"
+                        align="center"
                       >
-                        <DeleteIcon />
-                      </Button>
-                      <Button
-                        color="warning"
-                        onClick={() => {
-                          handleOpenEdit();
-                          setEditVal(row.id);
-                          console.log(editVal);
-                        }}
-                      >
-                        <EditIcon />
-                      </Button>
-                      <Button
-                        color="info"
-                        onClick={() => navigate(`/showcourse/${row.id}`)}
-                      >
-                        <RemoveRedEyeIcon />
-                      </Button>
-                    </StyledTableCell>
-                  </StyledTableRow>
-                ))
-              :
-              <Stack display={"flex"} justifyContent={"center"} alignItems={"center"} >
-                <Typography color={"red"} fontWeight={"bold"}>گشتم نبود نگرد نیست</Typography>
-              </Stack>
-              }
+                        {index + 1}
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        {row.title}
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        {row.teacher}
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        {row.duration}
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        {row.category}
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        {row.price}
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        <Button
+                          color="error"
+                          onClick={() => {
+                            setDeleteVal({ id: row.id, teacher: row.teacher });
+                            return handleOpen();
+                          }}
+                        >
+                          <DeleteIcon />
+                        </Button>
+                        <Button
+                          color="warning"
+                          onClick={() => {
+                            handleOpenEdit();
+                            setEditVal(row.id);
+                          }}
+                        >
+                          <EditIcon />
+                        </Button>
+                        <Button
+                          color="info"
+                          onClick={() => navigate(`/showcourse/${row.id}`)}
+                        >
+                          <RemoveRedEyeIcon />
+                        </Button>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))
+                ) : (
+                  <Stack
+                    display={"flex"}
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                  >
+                    <Typography color={"red"} fontWeight={"bold"}>
+                      گشتم نبود نگرد نیست
+                    </Typography>
+                  </Stack>
+                )}
               </TableBody>
             </Table>
             <FormControlLabel
